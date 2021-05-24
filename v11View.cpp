@@ -29,25 +29,49 @@ END_MESSAGE_MAP()
 
 // Cv11View construction/destruction
 
-Cv11View::Cv11View() {}
+
+Cv11View::Cv11View():shape(0), color(0), shapeTmp(0), colorTmp(0) {}
 
 Cv11View::~Cv11View()
-{
-}
 
-BOOL Cv11View::PreCreateWindow(CREATESTRUCT& cs)
 {
+
+}
+BOOL Cv11View::PreCreateWindow(CREATESTRUCT& cs) {
 	// TODO: Modify the Window class or styles here by modifying
 	//  the CREATESTRUCT cs
 
 	return CView::PreCreateWindow(cs);
 }
-
+	
 // Cv11View drawing
 
-void Cv11View::OnDraw(CDC* pDC)
-{
-}
+
+	void Cv11View::OnDraw(CDC * pDC)
+	{
+		CPen pen;
+		pen.CreatePen(PS_SOLID, 2, RGB(0, 0, 0));
+		pDC->SelectObject(pen);
+		switch (shape)
+		{
+		case 0:
+			pDC->Rectangle(rc);
+			break;
+		case 1:
+			pDC->Ellipse(rc);
+			break;
+		case 2:
+			pDC->RoundRect(rc, POINT{ 50,50 });
+			break;
+		default:
+			break;
+		}
+
+
+	}
+
+
+
 
 
 // Cv11View printing
@@ -112,4 +136,59 @@ Cv11Doc* Cv11View::GetDocument() const // non-debug version is inline
 
 
 // Cv11View message handlers
+void Cv11View::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	CRectTracker tracker;
+	if (tracker.TrackRubberBand(this, point))
+		rc = tracker.m_rect;
+	Invalidate();
+}
 
+void Cv11View::OnShape()
+{
+	CArray<CMFCRibbonBaseElement*, CMFCRibbonBaseElement*> arr;
+	((CMainFrame*)AfxGetMainWnd())->m_wndRibbonBar.GetElementsByID(ID_SHAPE, arr);
+	CMFCRibbonGallery* pGallery = (CMFCRibbonGallery*)arr.GetAt(0);
+
+	shape = shapeTmp = pGallery->GetSelectedItem();
+
+	Invalidate();
+}
+
+
+void Cv11View::OnColor()
+{
+	CArray<CMFCRibbonBaseElement*, CMFCRibbonBaseElement*> arr;
+	((CMainFrame*)AfxGetMainWnd())->m_wndRibbonBar.GetElementsByID(ID_COLOR, arr);
+	CMFCRibbonColorButton* pColor = (CMFCRibbonColorButton*)arr.GetAt(0);
+
+	color = colorTmp = pColor->GetColor();
+
+	Invalidate();
+}
+
+LRESULT Cv11View::OnHighlightRibbonListItem(WPARAM wp, LPARAM lp)
+{
+	int index = (int)wp;
+	CMFCRibbonBaseElement* pElem = (CMFCRibbonBaseElement*)lp;
+	CMFCRibbonColorButton* pColor = (CMFCRibbonColorButton*)lp;
+	UINT id = pElem->GetID();
+
+	switch (id)
+	{
+	case ID_COLOR:
+		if (index == -1)
+			color = colorTmp;
+		else
+			color = pColor->GetHighlightedColor();
+		break;
+	case ID_SHAPE:
+		if (index == -1)
+			shape = shapeTmp;
+		else
+			shape = index;
+		break;
+	}
+	Invalidate();
+	return 0;
+}

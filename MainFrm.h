@@ -32,15 +32,14 @@ protected:  // control bar embedded members
 	CMFCRibbonStatusBar  m_wndStatusBar;
 
 // Generated message map functions
-protected:
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnApplicationLook(UINT id);
-	afx_msg void OnUpdateApplicationLook(CCmdUI* pCmdUI);
-	afx_msg void OnFilePrint();
-	afx_msg void OnFilePrintPreview();
-	afx_msg void OnUpdateFilePrintPreview(CCmdUI* pCmdUI);
-	DECLARE_MESSAGE_MAP()
-
+afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+afx_msg void OnApplicationLook(UINT id);
+afx_msg void OnUpdateApplicationLook(CCmdUI* pCmdUI);
+afx_msg void OnFilePrint();
+afx_msg void OnFilePrintPreview();
+afx_msg void OnUpdateFilePrintPreview(CCmdUI* pCmdUI);
+LRESULT Highlight(WPARAM wp, LPARAM lp);
+DECLARE_MESSAGE_MAP()
 };
 
 

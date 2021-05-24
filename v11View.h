@@ -12,6 +12,11 @@ public:
 
 // Operations
 public:
+	CRect rc;
+	COLORREF color;
+	int shape;
+	COLORREF colorTmp;
+	int shapeTmp;
 
 // Overrides
 public:
@@ -21,6 +26,7 @@ protected:
 	virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
 	virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
 	virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
+	
 
 // Implementation
 public:
@@ -37,7 +43,12 @@ protected:
 	afx_msg void OnFilePrintPreview();
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
+	LRESULT Cv11View::OnHighlightRibbonListItem(WPARAM wp, LPARAM lp);
 	DECLARE_MESSAGE_MAP()
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnMButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnShape();
+	afx_msg void OnColor();
 public:
 };
 
