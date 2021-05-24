@@ -19,6 +19,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CMainFrame::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CMainFrame::OnFilePrintPreview)
 	ON_UPDATE_COMMAND_UI(ID_FILE_PRINT_PREVIEW, &CMainFrame::OnUpdateFilePrintPreview)
+	ON_REGISTERED_MESSAGE(AFX_WM_ON_HIGHLIGHT_RIBBON_LIST_ITEM, &CMainFrame::OnHighlightRibbonListItem)
 END_MESSAGE_MAP()
 
 // CMainFrame construction/destruction
@@ -199,3 +200,7 @@ void CMainFrame::OnUpdateFilePrintPreview(CCmdUI* pCmdUI)
 	pCmdUI->SetCheck(IsPrintPreview());
 }
 
+LRESULT CMainFrame::OnHighlightRibbonListItem(WPARAM wp, LPARAM lp)
+{
+	return GetActiveView()->SendMessage(AFX_WM_ON_HIGHLIGHT_RIBBON_LIST_ITEM, wp, lp);
+}
